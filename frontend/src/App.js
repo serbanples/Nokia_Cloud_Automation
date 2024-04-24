@@ -28,12 +28,12 @@ function App() {
   return (
     <div className="container">
       <center>
-        <h1>Ceva titlu ce zic bossii</h1>
+        <h1>punem titlu?</h1>
       </center>
 
       <div className="input-box">
       <input
-          type="search"
+          type="search" //SA MEARGA LA ENTER
           name="search-form"
           id="search-form"
           className="search-input"
@@ -41,45 +41,43 @@ function App() {
           placeholder="Search"
           />
 
-        {/* <center>
-          {search(data).map((dataObj) => {
-            return (
-              <div className="box">
-                <div class="card">
-                  <div class="category">@{dataObj.username} </div>
-                  <div class="heading">
-                    {dataObj.name}
-                    <div class="author">{dataObj.email}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </center> */}
+          <button
+            type="button"
+            className="search-button"
+            onClick={() => search(data)}>
+              <FontAwesomeIcon icon={faSearch} />
+          </button>
+      </div>
+        
+        <h2 className="">aici trebe ceva??</h2>
+        <div className='box-container'>
+          <div className="box left-text">    
+            <p>Name</p>
+            <p>Topology</p>
+            <p>Owner</p>
+            <p>VM1</p>
+            <p>M-Plane</p>
+            <p>VM2</p>
+          </div>
+
+          <div className="box right-text">    
+            <p>SBTS1179</p>
+            <p>CLOUD_SRAN_NR_1179_ABIO_AEHC</p>
+            <p>Iasmin</p>
+            <p>10.6.21.179</p>
+            <p>15.20.247.79</p>
+            <p>0</p>
+          </div>
+        </div>
 
         <button
-          type="button"
-          className="search-button"
-          onClick={() => search(data)}
-        >
-          <FontAwesomeIcon icon={faSearch} />
+            type="connect"
+            className="search-button connect-button"
+            onClick={() => search(data)}>
+                Connect          
         </button>
-        </div>
-
-        <div style={{ 
-            marginLeft: '40%', 
-            marginTop: '60px', 
-            width: '30%'
-        }}>
-            {/* <Box color="white"
-                bgcolor="palevioletred" p={1}>
-                Greetings from GeeksforGeeks!
-            </Box> */}
-        </div>
 
     </div>
-
-
   );
 }
 

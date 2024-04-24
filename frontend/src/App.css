@@ -36,9 +36,9 @@
   height: 100vh; /* Set the height to the full viewport height */
 }
 
-.search-container {
+.input-box {
   display: flex;
-  align-items: center; /* Center items horizontally */
+  align-items: center; 
   margin-bottom: 20px;
 }
 
@@ -65,11 +65,33 @@
   background-color: #0056b3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.box {
+  flex: 1;
+  margin: 1rem;
+  border-radius: 14px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
+
+.box-container {
+  display: flex;
+  flex-direction: row;
+  background-color: #E2E2E2;
+  border-radius: 18px;
+  border: 2px solid black;
+  width: 50%;
+}
+
+.left-text{
+  text-align: left;
+}
+
+.right-text{
+  text-align: right;
+}
+
+.connect-button{
+  margin-top: 20px;
+  font-weight: bold;
+}
+
