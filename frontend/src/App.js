@@ -74,7 +74,7 @@ function App() {
             type="connect"
             className="search-button connect-button"
             onClick={() => search(data)}>
-                Connect          
+                Connectttttt          
         </button>
 
     </div>
