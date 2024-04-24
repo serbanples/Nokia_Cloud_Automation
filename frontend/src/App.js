@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 // import Box from '@material-ui/core/Box';
 import './App.css';
 
@@ -11,6 +12,20 @@ function App() {
   const handleChange = (event) => {
     setName(event.target.value);
     console.log(name);
+  }
+
+  const search = () => {
+    axios.get(`http://127.0.0.1:5000/data/${name}`)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      })
+  }
+
+  const connect = () => {
+
   }
 
   return (
@@ -33,7 +48,7 @@ function App() {
           <button
             type="button"
             className="search-button"
-            //onClick={() => search(data)}
+            onClick={() => search()}
             >
               <FontAwesomeIcon icon={faSearch} />
           </button>
@@ -63,7 +78,7 @@ function App() {
         <button
             type="connect"
             className="search-button connect-button"
-            //onClick={() => search(data)}
+            onClick={() => connect()}
             >
                 Connect
         </button>
