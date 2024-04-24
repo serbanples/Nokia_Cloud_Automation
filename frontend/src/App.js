@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 // import Box from '@material-ui/core/Box';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState([]);
-  const fetchData = () => {
-    //TBC...
-  };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [ name, setName ] = useState('');
 
-  const [query, setQuery] = useState("");
-  const search_parameters = Object.keys(Object.assign({}, ...data));
-
-  function search(data) {
-    return data.filter((data) => 
-      search_parameters.some((parameter) =>
-        data[parameter].toString().toLowerCase().includes(query)
-      )
-    );
+  const handleChange = (event) => {
+    setName(event.target.value);
+    console.log(name);
   }
 
   return (
@@ -37,14 +25,16 @@ function App() {
           name="search-form"
           id="search-form"
           className="search-input"
-          onChange={(e) => setQuery(e.target.value)}
+          value={name}
+          onChange={handleChange}
           placeholder="Search"
           />
 
           <button
             type="button"
             className="search-button"
-            onClick={() => search(data)}>
+            //onClick={() => search(data)}
+            >
               <FontAwesomeIcon icon={faSearch} />
           </button>
       </div>
@@ -73,8 +63,9 @@ function App() {
         <button
             type="connect"
             className="search-button connect-button"
-            onClick={() => search(data)}>
-                Connectttttt          
+            //onClick={() => search(data)}
+            >
+                Connect
         </button>
 
     </div>
