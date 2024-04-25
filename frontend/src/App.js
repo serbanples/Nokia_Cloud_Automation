@@ -15,7 +15,7 @@ function App() {
   const search = async () => {
     if (name) {
       try {
-        const response = await fetch(`http://localhost:5000/data/${name}`);
+        const response = await fetch(`http://localhost:5000/data/${name}`); // Update the endpoint URL here
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
