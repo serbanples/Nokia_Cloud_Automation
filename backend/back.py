@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 from features.excel_reader import read_xlsx, find_entries_by_name
 from features.ssh_script import test_ssh_connection
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/data/<string:name>', methods=['GET'])
 def get_data(name):
@@ -20,10 +23,11 @@ def connect_ssh():
     data = request.json
     username = data.get('name')
     VM1 = data.get('VM1')
+    VM2 = data.get('VM2')
 
     success, message = test_ssh_connection(VM1, username)
 
-    return jsonify({ 'success': success, 'message': message })
+    return jsonify({'success': success, 'message': message})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
