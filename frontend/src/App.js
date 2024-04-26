@@ -15,17 +15,63 @@ function App() {
   const search = async () => {
     if (name) {
       try {
-        const response = await fetch(`http://localhost:5000/data/${name}`); // Update the endpoint URL here
+        const response = await fetch(`http://127.0.0.1:5000/data/${name}`, {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+  
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+  
         const data = await response.json();
-        setUserData(data);
-        setError('');
+        if (data.length === 0) {
+          setError('Name not found');
+          setUserData(null);
+        } else {
+          setUserData(data);
+          setError('');
+        }
       } catch (error) {
         setError('Failed to fetch data');
         setUserData(null);
         console.error('Error fetching data: ', error);
+      }
+    }
+    else {
+      setError('Please enter a name');
+      setUserData(null);
+    }
+  };
+  
+
+  const connect = async () => {
+    if (userData && userData.length > 0) {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/connect', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: userData[0].owner,
+            VM1: userData[0].VM1,
+            VM2: userData[0].VM2
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error connecting: ', error);
       }
     }
   };
@@ -58,7 +104,7 @@ function App() {
       {error && <p className="error-message">{error}</p>}
       
       {userData && (
-        <div className="data-container">
+        <div className="box-container">
           <div className="box left-text">
             <p>Name</p>
             <p>Topology</p>
@@ -81,7 +127,7 @@ function App() {
       <button
         type="button"
         className="search-button connect-button"
-        onClick={search}
+        onClick={connect}
       >
         Connect
       </button>
