@@ -7,6 +7,7 @@ function App() {
   const [name, setName] = useState('');
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState('');
+  const [connectResponse, setConnectResponse] = useState(null);
 
   const handleChange = (event) => {
     setName(event.target.value);
@@ -49,7 +50,7 @@ function App() {
   };
   
 
-  const connect = async () => {
+  const connect = async (VM) => {
     if (userData && userData.length > 0) {
       try {
         const response = await fetch('http://127.0.0.1:5000/connect', {
@@ -59,22 +60,23 @@ function App() {
           },
           body: JSON.stringify({
             name: userData[0].owner,
-            VM1: userData[0].VM1,
-            VM2: userData[0].VM2
+            VM1: VM
           })
         });
-
+  
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-
+  
         const data = await response.json();
+        setConnectResponse(data);
         console.log(data);
       } catch (error) {
         console.error('Error connecting: ', error);
       }
     }
   };
+  
 
   return (
     <div className="container">
@@ -117,9 +119,9 @@ function App() {
             <p>{userData[0].name}</p>
             <p>{userData[0].topology}</p>
             <p>{userData[0].owner}</p>
-            <p>{userData[0].VM1}</p>
+            <p>{userData[0].VM1 ? userData[0].VM1 : '----'}</p>
             <p>{userData[0].MPlane}</p>
-            <p>{userData[0].VM2}</p>
+            <p>{userData[0].VM2 ? userData[0].VM2 : '----'}</p>
           </div>
         </div>
       )}
@@ -127,10 +129,18 @@ function App() {
       <button
         type="button"
         className="search-button connect-button"
-        onClick={connect}
+        onClick={() => connect(userData && userData[0]?.VM1)}
+        disabled={!userData || userData.length === 0} // Disable button when no user data available
       >
         Connect
       </button>
+
+      {connectResponse && (
+        <div className='connect-message'>
+        {connectResponse.message}
+      </div>
+      )}
+      
     </div>
   );
 }
