@@ -59,7 +59,7 @@ function App() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            name: userData[0].owner,
+            name: userData[0].name,
             VM1: VM
           })
         });
@@ -137,8 +137,8 @@ function App() {
 
       {connectResponse && (
         <div className='connect-message'>
-        {connectResponse.message}
-      </div>
+          {connectResponse.message}
+        </div>
       )}
       
     </div>
