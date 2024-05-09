@@ -17,7 +17,6 @@ Before installing Nokia_Cloud_Automation, ensure you have the following prerequi
 2. **Install python dependencies**
     ```markdown
     <!-- If the following command does not work, try using pip3 instead -->
-    ```bash
     cd backend
     pip install openpyxl paramiko flask flask_cors
 
@@ -29,7 +28,6 @@ Before installing Nokia_Cloud_Automation, ensure you have the following prerequi
 3. **Run python Backend service**
     ```markdown
     <!-- If the following command does not work, try using pip3 instead -->
-    ```bash
     cd backend
     python back.py
 
