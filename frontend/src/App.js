@@ -106,34 +106,38 @@ function App() {
       {error && <p className="error-message">{error}</p>}
       
       {userData && (
-        <div className="box-container">
-          <div className="box left-text">
-            <p>Name</p>
-            <p>Topology</p>
-            <p>Owner</p>
-            <p>VM1</p>
-            <p>M-Plane</p>
-            <p>VM2</p>
+        <>
+          <div className="box-container">
+            <div className="box left-text">
+              <p>Name</p>
+              <p>Topology</p>
+              <p>Owner</p>
+              <p>VM1</p>
+              <p>M-Plane</p>
+              <p>VM2</p>
+            </div>
+            <div className="box right-text">
+              <p>{userData[0].name}</p>
+              <p>{userData[0].topology}</p>
+              <p>{userData[0].owner}</p>
+              <p>{userData[0].VM1 ? userData[0].VM1 : '----'}</p>
+              <p>{userData[0].MPlane}</p>
+              <p>{userData[0].VM2 ? userData[0].VM2 : '----'}</p>
+            </div>
           </div>
-          <div className="box right-text">
-            <p>{userData[0].name}</p>
-            <p>{userData[0].topology}</p>
-            <p>{userData[0].owner}</p>
-            <p>{userData[0].VM1 ? userData[0].VM1 : '----'}</p>
-            <p>{userData[0].MPlane}</p>
-            <p>{userData[0].VM2 ? userData[0].VM2 : '----'}</p>
-          </div>
-        </div>
+
+          <button
+            type="button"
+            className="search-button connect-button"
+            onClick={() => connect(userData && userData[0]?.VM1)}
+            disabled={!userData || userData.length === 0} // Disable button when no user data available
+          >
+            Connect
+          </button>
+        </>
       )}
 
-      <button
-        type="button"
-        className="search-button connect-button"
-        onClick={() => connect(userData && userData[0]?.VM1)}
-        disabled={!userData || userData.length === 0} // Disable button when no user data available
-      >
-        Connect
-      </button>
+      
 
       {connectResponse && (
         <div className='connect-message'>
