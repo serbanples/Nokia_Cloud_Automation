@@ -23,7 +23,6 @@ def connect_ssh():
     data = request.json
     username = data.get('name')
     VM1 = data.get('VM1')
-    VM2 = data.get('VM2')
 
     success, message = test_ssh_connection(VM1, username)
 
