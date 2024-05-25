@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import nokia_logo from "../../../public/nokia-logo.png";
 import { Link } from 'react-router-dom'; // If you're using React Router
 
 const LogIn = () => {
@@ -29,10 +30,12 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-md">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={onSubmit}>
-          <div className="mb-4">
+    <div className='flex justify-center items-center flex-row w-full'>
+      <div className="flex justify-center items-center h-screen w-screen" style={{ backgroundImage: `url(${nokia_logo})`, backgroundSize: '100%100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
+        <div className="w-full max-w-md items-center flex justify-center flex-col bg-white bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4">
+          <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Log In</h1>
+          <form className='w-3/4' onSubmit={onSubmit}>
+            <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
@@ -71,6 +74,7 @@ const LogIn = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

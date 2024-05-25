@@ -73,18 +73,15 @@ def check_auth():
         return jsonify(user_data), 200
     return jsonify({"message": "User not authenticated"}), 401
 
-@app.route('/data/<string:name>', methods=['GET'])
-@login_required
-def get_data(name):
-    if not current_user.isAdmin:
-        return jsonify({"message": "Access forbidden: admin only"}), 403
+@app.route('/data', methods=['GET'])
+# @login_required
+def get_data():
     excel_file = os.path.join("files", "task3.xlsx")
-    print(f"Requesting data from file: task3.xlsx for user: {name}")
+    print(f"Requesting data from file: task3.xlsx for user:")
 
     xlsx_data = read_xlsx(excel_file)
-    entries = find_entries_by_name(xlsx_data, name)
 
-    return jsonify(entries)
+    return jsonify(xlsx_data)
 
 @app.route('/connect', methods=['POST'])
 @login_required
