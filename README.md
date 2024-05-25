@@ -14,24 +14,27 @@ Before installing Nokia_Cloud_Automation, ensure you have the following prerequi
    ```bash
    git clone https://github.com/serbanples/Nokia_Cloud_Automation.git
 
-2. **Install python dependencies**
+2. **Create python Env**
     ```markdown
     <!-- If the following command does not work, try using pip3 instead -->
     cd backend
-    pip install openpyxl paramiko flask flask_cors
+    backend % python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+
 
 2. **Install JavaScript dependencies**
     ```bash
-    cd frontend
+    cd fronten
     npm install
 
 3. **Run python Backend service**
     ```markdown
     <!-- If the following command does not work, try using pip3 instead -->
     cd backend
-    python back.py
+    flask run
 
 4. **Run JavaScript Frontend**
     ```bash
-    cd frontend
-    npm run
+    cd fronten
+    npm run dev
