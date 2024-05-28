@@ -40,3 +40,11 @@ Before installing Nokia_Cloud_Automation, ensure you have the following prerequi
     ```bash
     cd fronten
     npm run dev
+
+5. **Already made accounts for testing**
+    user account:
+     - test1@mail.com
+     - Test1Test1*
+
+    admin account:
+     - TO DO

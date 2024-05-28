@@ -11,13 +11,14 @@ def register():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
+    is_admin = data.get('is_admin', False)
 
     if User.query.filter_by(username=username).first():
         return jsonify({'message': 'Username already exists'}), 400
     if User.query.filter_by(email=email).first():
         return jsonify({'message': 'Email already exists'}), 400
 
-    user = User(username=username, email=email)
+    user = User(username=username, email=email, is_admin=is_admin)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -51,6 +52,16 @@ def get_user():
         return jsonify({
             'id': user.id,
             'username': user.username,
-            'email': user.email
+            'email': user.email,
+            'is_admin': user.is_admin
         }), 200
+    return jsonify({'message': 'User not found'}), 404
+
+@user_bp.route('/isAdmin', methods=['GET'])
+@jwt_required()
+def is_admin():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if user:
+        return jsonify({'is_admin': user.is_admin}), 200
     return jsonify({'message': 'User not found'}), 404

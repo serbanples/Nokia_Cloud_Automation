@@ -26,6 +26,7 @@ const Profile = () => {
                 <div>
                     <p>Username: {user.username}</p>
                     <p>Email: {user.email}</p>
+                    <p>Admin: {user.is_admin ? "yes" : "no"}</p>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             )}

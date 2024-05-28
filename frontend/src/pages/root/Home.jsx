@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
-import VMBox from '../../components/VMBox';
+import VMBox from '../../components/vmbox/VMBox';
 import ApiService from '../../api/apiService';
+import AuthService from '../../api/authService';
+import ModalForm from '../../components/ModalForm';
+import AddVMBox from '../../components/vmbox/AddVMBox';
 
 const Home = () => {
+  const [isAdmin, setIsAdmin] = useState(false)
   const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const isAdmin = AuthService.getAdminState();
+    setIsAdmin(isAdmin);
+  }, []);
 
   useEffect(() => {
     ApiService.fetchData().then(rawData => {
@@ -23,6 +33,18 @@ const Home = () => {
     });
   }, []);
 
+  const handleAddClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  }
+
+  const handleFormSubmit = (newData) => {
+    console.log(newData);
+  };
+
   return (
     <div>
       <NavBar />
@@ -33,7 +55,11 @@ const Home = () => {
         {data.map((row, index) => (
           <VMBox key={index} data={row} />
         ))}
+        {isAdmin && (
+          <AddVMBox onClick={handleAddClick} />
+        )}
       </div>
+      <ModalForm isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
     </div>
     )
 }
