@@ -18,19 +18,21 @@ Before installing Nokia_Cloud_Automation, ensure you have the following prerequi
     ```markdown
     <!-- If the following command does not work, try using pip3 instead -->
     cd backend
-    backend % python3 -m venv venv
+    python3 -m venv venv
     source venv/bin/activate
+    cd server
     pip install -r requirements.txt
+    cd backend
+    export FLASK_APP=server:create_app
 
 
 2. **Install JavaScript dependencies**
     ```bash
-    cd fronten
+    cd frontend
     npm install
 
 3. **Run python Backend service**
     ```markdown
-    <!-- If the following command does not work, try using pip3 instead -->
     cd backend
     flask run
 
