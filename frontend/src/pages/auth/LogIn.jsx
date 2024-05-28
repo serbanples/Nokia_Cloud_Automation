@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import AuthService from '../../api/authService';
 
 const LogIn = () => {
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    rememberMe: false
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
-  const { email, password } = formData;
+  const { email, password, rememberMe } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.id]: e.target.value });
+
+  const onCheckboxChange = e => setFormData({ ...formData, rememberMe: e.target.checked });
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        await AuthService.login(email, password);
-        navigate('/root/profile');
+        await AuthService.login(email, password, rememberMe);
+        navigate('/');
         window.location.reload();
     } catch (error) {
         console.error('Invalid credentials:', error);
@@ -26,49 +31,75 @@ const LogIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-md">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
+    <>
+      <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Log In</h1>
+      <form className='w-3/4' onSubmit={handleLogin}>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+          <div className="relative">
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
               placeholder="Email"
               required
+              value={email}
               onChange={onChange}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
             />
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
+        </div>
+        <div className="mb-2">
+          <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+          <div className="relative flex items-center">
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               required
+              value={password}
               onChange={onChange}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full"
             />
-          </div>
-          <div className="flex items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+              onMouseDown={() => setShowPassword(true)}
+              onMouseUp={() => setShowPassword(false)}
+              onMouseLeave={() => setShowPassword(false)}
+              className="absolute right-0 mr-2 mb-3 text-gray-600 focus:outline-none"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+        </div>
+        <div className="mb-4 flex items-center">
+          <input
+            type="checkbox"
+            id="rememberMe"
+            checked={rememberMe}
+            onChange={onCheckboxChange}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label htmlFor="rememberMe" className="ml-2 block text-gray-700 text-sm">
+            Remember Me
+          </label>
+        </div>
+        <div className="flex justify-between">
+          <div className='flex object-left'>
+            <button
               type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Log In
             </button>
-            <Link to="/signup" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-              Don't have an account? Sign up
+          </div>
+          <div className='flex text-right'>
+            <Link to="/auth/signup" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+              Don't have an account?<br/> Sign up
             </Link>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+    </>
   );
 };
 

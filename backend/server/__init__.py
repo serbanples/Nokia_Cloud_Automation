@@ -22,11 +22,14 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": ["http://localhost:5173"]}}, supports_credentials=True)
+    # CORS(app)
 
     from server.blueprints.user import user_bp
     from server.blueprints.ssh import ssh_bp
+    from server.blueprints.data import data_bp
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(ssh_bp, url_prefix='/ssh')
+    app.register_blueprint(data_bp, url_prefix='/data')
 
     return app

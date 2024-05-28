@@ -1,53 +1,43 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // If you're using React Router
-import nokia_logo from "../../../public/nokia-logo.png";
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom'; // If you're using React Router
 import AuthService from '../../api/authService';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirm_password: ''
+    confirm_password: '',
+    rememberMe: false
   });
-  const [message, setMessage] = useState('');
 
-  const { name, email, password, confirm_password } = formData;
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { name, email, password, confirm_password, rememberMe } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.id]: e.target.value });
 
-  const onSubmit = async e => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('http://127.0.0.1:5000/register', {
-        username: name,
-        email,
-        password,
-        confirm_password
-      });
-      console.log(res.data);
-      // Handle success, redirect, show a message, etc.
-    } catch (err) {
-      console.error(err.response.data);
-      // Handle error, show error message, etc.
-    }
-  };
+  const onCheckboxChange = e => setFormData({ ...formData, rememberMe: e.target.checked });
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
         await AuthService.register(name, email, password);
-        props.history.push('/login');
+        await AuthService.login(email, password, rememberMe);
+        navigate('/');
+        window.location.reload();
     } catch (error) {
-        setMessage('Failed to register');
+        console.log('Failed to register', error);
     }
   };
 
   return (
-    <div className='flex justify-center items-center flex-row w-full'>
-      <div className="flex justify-center items-center h-screen w-screen" style={{ backgroundImage: `url(${nokia_logo})`, backgroundSize: '100%100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
-        <div className="w-full max-w-md items-center flex justify-center flex-col bg-white bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4">
+    <>
           <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Sign Up</h1>
           <form className='w-3/4' onSubmit={handleRegister}>
             <div className="mb-4">
@@ -80,31 +70,61 @@ const SignUp = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Password"
                   required
                   value={password}
                   onChange={onChange}
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full"
                 />
+                <button
+                  type="button"
+                  onMouseDown={() => setShowPassword(true)}
+                  onMouseUp={() => setShowPassword(false)}
+                  onMouseLeave={() => setShowPassword(false)}
+                  className="absolute right-0 mr-2 mb-3 text-gray-600 focus:outline-none"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
             </div>
-            <div className="mb-6">
+            <div className="mb-2">
               <label htmlFor="confirm-password" className="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <input
                   id="confirm_password"
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirm Password"
                   required
                   value={confirm_password}
                   onChange={onChange}
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline w-full"
                 />
+                <button
+                  type="button"
+                  onMouseDown={() => setShowConfirmPassword(true)}
+                  onMouseUp={() => setShowConfirmPassword(false)}
+                  onMouseLeave={() => setShowConfirmPassword(false)}
+                  className="absolute right-0 mr-2 mb-3 text-gray-600 focus:outline-none"
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
+            </div>
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={onCheckboxChange}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label htmlFor="rememberMe" className="ml-2 block text-gray-700 text-sm">
+                Remember Me
+              </label>
             </div>
             <div className="flex justify-between">
               <div className='flex object-left'>
@@ -116,15 +136,13 @@ const SignUp = () => {
                 </button>
               </div>
               <div className='flex text-right'>
-                <Link to="/login" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                <Link to="/auth/login" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                   Already have an account?<br/> Log in
                 </Link>
               </div>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

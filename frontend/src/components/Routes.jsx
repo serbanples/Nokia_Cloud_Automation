@@ -13,6 +13,6 @@ export const AuthRoutes = () => {
     const access_token = AuthService.getAccessToken();
 
     return (
-        access_token ? <Navigate to="/root/profile" /> : <Outlet />
+        access_token ? <Navigate to="/" /> : <Outlet />
     )
 }

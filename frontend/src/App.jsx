@@ -6,15 +6,16 @@ import Page from './pages/root/Page'
 import { AuthRoutes, RootRoutes } from './components/Routes'
 import Profile from './pages/root/Profile'
 import Home from './pages/root/Home'
+import AuthLayout from './pages/auth/AuthLayout'
 
 const App = () => {
   return (
     <Routes>
-      <Route path='/root' element={ <RootRoutes /> }>
-        <Route path='profile' element={ <Profile /> } />
-        <Route index path='home' element={ <Home />} />
+      <Route element={ <RootRoutes /> }>
+        <Route path='/profile' element={ <Profile /> } />
+        <Route index element={ <Home />} />
       </Route>
-      <Route path='auth' element={ <AuthRoutes /> }>
+      <Route path='/auth' element={ <AuthLayout /> }>
         <Route path='login' element={ <LogIn /> } />
         <Route path='signup' element={ <SignUp /> } />
       </Route>
