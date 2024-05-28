@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import ApiService from "../../api/apiService"
 import './page.css';
 
 const Page = () => {
@@ -16,14 +17,7 @@ const Page = () => {
   const search = async () => {
     if (name) {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/data/${name}`, {
-          method: 'GET',
-          mode: 'cors',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await ApiService.fetchData();
   
         if (!response.ok) {
           throw new Error('Network response was not ok');
