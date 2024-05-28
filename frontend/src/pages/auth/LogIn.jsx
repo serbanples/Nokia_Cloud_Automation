@@ -1,41 +1,35 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import nokia_logo from "../../../public/nokia-logo.png";
-import { Link } from 'react-router-dom'; // If you're using React Router
+import { Link, useNavigate } from 'react-router-dom';
+import AuthService from '../../api/authService';
 
 const LogIn = () => {
-
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
+  const navigate = useNavigate();
+
   const { email, password } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.id]: e.target.value });
 
-  const onSubmit = async e => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:5000/login', {
-        email,
-        password
-      });
-      console.log(res.data);
-      // Handle success, redirect, show a message, etc.
-    } catch (err) {
-      console.error(err.response.data);
-      // Handle error, show error message, etc.
+        await AuthService.login(email, password);
+        navigate('/root/profile');
+        window.location.reload();
+    } catch (error) {
+        console.error('Invalid credentials:', error);
     }
   };
 
   return (
-    <div className='flex justify-center items-center flex-row w-full'>
-      <div className="flex justify-center items-center h-screen w-screen" style={{ backgroundImage: `url(${nokia_logo})`, backgroundSize: '100%100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
-        <div className="w-full max-w-md items-center flex justify-center flex-col bg-white bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4">
-          <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Log In</h1>
-          <form className='w-3/4' onSubmit={onSubmit}>
-            <div className="mb-4">
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-full max-w-md">
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleLogin}>
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
@@ -74,7 +68,6 @@ const LogIn = () => {
           </div>
         </form>
       </div>
-    </div>
     </div>
   );
 };

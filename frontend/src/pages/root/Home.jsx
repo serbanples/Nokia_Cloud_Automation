@@ -2,25 +2,25 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import nokia_logo from "../../../public/nokia-logo.png";
 import { Link } from 'react-router-dom';
-import NavBar from '../../../components/NavBar';
-import VMBox from '../../../components/VMBox';
+import NavBar from '../../components/NavBar';
+import VMBox from '../../components/VMBox';
 
 const Home = () => {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:5000/data'); // Replace with your API endpoint
-        console.log(response);
-        // setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get('http://127.0.0.1:5000/data'); // Replace with your API endpoint
+  //       console.log(response);
+  //       // setData(result);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="container mx-auto p-4 bg-black">

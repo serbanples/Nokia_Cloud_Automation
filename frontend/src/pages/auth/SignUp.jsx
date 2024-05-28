@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // If you're using React Router
 import nokia_logo from "../../../public/nokia-logo.png";
 import axios from 'axios';
-import AuthService from '../../../api/authService';
+import AuthService from '../../api/authService';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
