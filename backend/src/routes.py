@@ -74,7 +74,7 @@ def check_auth():
     return jsonify({"message": "User not authenticated"}), 401
 
 @app.route('/data', methods=['GET'])
-# @login_required
+@login_required
 def get_data():
     excel_file = os.path.join("files", "task3.xlsx")
     print(f"Requesting data from file: task3.xlsx for user:")
