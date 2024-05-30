@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from datetime import timedelta
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,6 +18,10 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'ghajshfadhasodjo'
     app.config['JWT_SECRET_KEY'] = 'proiect-nokia-cloud'
+
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=10)  # Access token expiration time
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)    # Refresh token expiration time
+
 
     db.init_app(app)
     migrate.init_app(app, db)

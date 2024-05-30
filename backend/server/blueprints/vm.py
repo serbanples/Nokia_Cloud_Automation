@@ -32,9 +32,11 @@ def add_vm():
 @jwt_required()
 def get_vms():
     current_user_id = get_jwt_identity()
+
+    vms = VMTable.query.all()
     access_list = VMAccess.query.filter_by(user_id=current_user_id).all()
-    vm_ids = [access.vm_id for access in access_list]
-    vms = VMTable.query.filter(VMTable.id.in_(vm_ids)).all()
+    accessible_vm_ids = {access.vm_id for access in access_list}
+
     output = []
     for vm in vms:
         user = User.query.get(vm.added_by)
@@ -45,7 +47,9 @@ def get_vms():
             'VM1': vm.VM1,
             'VM2': vm.VM2,
             'M_Plane': vm.M_Plane,
-            'added_by': user.email if user else 'Unknown'
+            'added_by': user.email if user else 'Unknown',
+            'owner': user.username if user else 'Unknown',
+            'has_access': vm.id in accessible_vm_ids
         }
         output.append(vm_data)
     return jsonify({'vms': output}), 200

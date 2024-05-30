@@ -22,17 +22,24 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        if (error.response && error.response.status === 401) {
-            // Handle unauthorized access, e.g., redirect to login or refresh token
+axiosInstance.interceptors.response.use((response) => {
+    return response;
+}, async (error) => {
+    const originalRequest = error.config;
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+            const newAccessToken = await AuthService.refreshAccessToken();
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            return axiosInstance(originalRequest);
+        } catch (refreshError) {
+            AuthService.logout(); // Perform logout if refresh fails
+            return Promise.reject(refreshError);
         }
-        return Promise.reject(error);
     }
-);
+    return Promise.reject(error);
+});
 
 // Define your API functions using the Axios instance
 const fetchData = async () => {

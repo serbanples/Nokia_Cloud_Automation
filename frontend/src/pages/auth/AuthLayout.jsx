@@ -8,7 +8,7 @@ const AuthLayout = () => {
 
   return ( 
     access_token ? 
-      <Navigate to="/root/" /> 
+      <Navigate to="/" /> 
     :
       <div className='flex justify-center items-center flex-row w-full'>
         <div className="flex justify-center items-center h-screen w-screen" style={{ backgroundImage: `url(${nokia_logo})`, backgroundSize: '100% 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>

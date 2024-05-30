@@ -6,11 +6,30 @@ const axiosInstance = axios.create({
     baseURL: API_URL,
 });
 
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+    try {
+        const refreshToken = localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
+        const response = await axios.post(`${API_URL}/user/refresh`, {}, {
+            headers: {
+                'Authorization': `Bearer ${refreshToken}`
+            }
+        });
+        const { access_token } = response.data;
+        localStorage.setItem('access_token', access_token);
+        sessionStorage.setItem('access_token', access_token);
+        return access_token;
+    } catch (error) {
+        console.error('Error refreshing access token:', error);
+        throw error;
+    }
+};
+
 // Request interceptor to add the Authorization header
 axiosInstance.interceptors.request.use((config) => {
-    const tokens = JSON.parse(localStorage.getItem('tokens'));
-    if (tokens && tokens.access_token) {
-        config.headers['Authorization'] = `Bearer ${tokens.access_token}`;
+    const accessToken = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     config.headers['Content-Type'] = 'application/json';
     config.headers['Access-Control-Allow-Origin'] = '*';
@@ -22,9 +41,19 @@ axiosInstance.interceptors.request.use((config) => {
 // Response interceptor to handle responses
 axiosInstance.interceptors.response.use((response) => {
     return response;
-}, (error) => {
-    if (error.response && error.response.status === 401) {
-        // Handle unauthorized access, e.g., redirect to login or refresh token
+}, async (error) => {
+    const originalRequest = error.config;
+    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+            const newAccessToken = await refreshAccessToken();
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            return axiosInstance(originalRequest);
+        } catch (refreshError) {
+            logout(); // Perform logout if refresh fails
+            return Promise.reject(refreshError);
+        }
     }
     return Promise.reject(error);
 });
@@ -102,5 +131,6 @@ export default {
     login,
     logout,
     getAccessToken,
-    getAdminState
+    getAdminState,
+    refreshAccessToken
 };

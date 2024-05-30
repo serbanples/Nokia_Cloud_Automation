@@ -5,6 +5,7 @@ import ApiService from '../../api/apiService';
 import AuthService from '../../api/authService';
 import ModalForm from '../../components/ModalForm';
 import AddVMBox from '../../components/vmbox/AddVMBox';
+import ExtendVMBox from '../../components/ExtendVMBox';
 
 const Home = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -19,35 +20,30 @@ const Home = () => {
   const [vms, setVms] = useState([]);
 
   useEffect(() => {
-    const fetchVMs = async () => {
-        try {
-            const response = await ApiService.getVMs();
-            setVms(response.vms);
-            console.log('vms', response.vms); 
-        } catch (error) {
-            console.error('Error fetching VMs:', error);
-        }
-    };
-
-    fetchVMs();
-  }, []);
-
-  useEffect(() => {
-    ApiService.fetchData().then(rawData => {
-      const headers = rawData[0];
-      const rows = rawData.slice(1);
-      const formattedData = rows.map(row => {
-        let obj = {};
-        row.forEach((value, index) => {
-          obj[headers[index]] = value;
-        });
-        return obj;
-      });
-      setData(formattedData);
+    ApiService.getVMs().then(rawData => {
+      setData(rawData.vms);
+      console.log(rawData.vms);
     }).catch(error => {
       console.error('Error fetching data:', error);
     });
   }, []);
+
+  // useEffect(() => {
+  //   ApiService.fetchData().then(rawData => {
+  //     const headers = rawData[0];
+  //     const rows = rawData.slice(1);
+  //     const formattedData = rows.map(row => {
+  //       let obj = {};
+  //       row.forEach((value, index) => {
+  //         obj[headers[index]] = value;
+  //       });
+  //       return obj;
+  //     });
+  //     setData(formattedData);
+  //   }).catch(error => {
+  //     console.error('Error fetching data:', error);
+  //   });
+  // }, []);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
@@ -60,6 +56,7 @@ const Home = () => {
   const handleFormSubmit = async (newData) => {
     try {
       const response = await ApiService.createVM(newData);
+      window.location.reload();
       console.log('VM created successfully:', response);
   } catch (error) {
       console.error('Error creating VM:', error);
@@ -69,16 +66,18 @@ const Home = () => {
   return (
     <div>
       <NavBar />
-      <div className='bg-black w-full'>
-        aaa
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((row, index) => (
-          <VMBox key={index} data={row} />
+          <div key={index} className={row.has_access ? '' : 'opacity-50'}>
+            <VMBox data={row} />
+          </div>
         ))}
         {isAdmin && (
           <AddVMBox onClick={handleAddClick} />
         )}
+      </div>
+      <div>
+        <ExtendVMBox />
       </div>
       <ModalForm isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
     </div>
