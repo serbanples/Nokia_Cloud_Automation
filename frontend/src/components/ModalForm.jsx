@@ -2,23 +2,22 @@
 import React, { useState } from 'react';
 
 const ModalForm = ({ isOpen, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({
+  const [vmData, setVmData] = useState({
     name: '',
-    status: '',
-    ip: '',
-    os: '',
-    cpu: '',
-    memory: ''
-  });
+    topology: '',
+    VM1: '',
+    VM2: '',
+    M_Plane: ''
+});
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setVmData({ ...vmData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();  // Close the modal after submission
+    onSubmit(vmData);
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -34,57 +33,57 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={vmData.name}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-1">Status</label>
+              <label className="block text-gray-700 mb-1">Topology</label>
               <input
                 type="text"
-                name="status"
-                value={formData.status}
+                name="topology"
+                value={vmData.topology}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-1">IP</label>
+              <label className="block text-gray-700 mb-1">VM1</label>
               <input
                 type="text"
-                name="ip"
-                value={formData.ip}
+                name="VM1"
+                value={vmData.VM1}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-1">OS</label>
+              <label className="block text-gray-700 mb-1">VM2</label>
               <input
                 type="text"
-                name="os"
-                value={formData.os}
+                name="VM2"
+                value={vmData.VM2}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-1">CPU</label>
+              <label className="block text-gray-700 mb-1">M-Plane</label>
               <input
                 type="text"
-                name="cpu"
-                value={formData.cpu}
+                name="M_Plane"
+                value={vmData.M_Plane}
                 onChange={handleChange}
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
             </div>
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-gray-700 mb-1">Memory</label>
               <input
                 type="text"
@@ -94,7 +93,7 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
                 className="w-full p-3 border rounded-lg text-gray-700"
                 required
               />
-            </div>
+            </div> */}
           </div>
           <div className="flex justify-end">
             <button

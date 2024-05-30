@@ -62,8 +62,48 @@ const getCurrentUser = async () => {
     }
 };
 
+const createVM = async (vmData) => {
+    try {
+        const response = await axiosInstance.post('/vm/vms', vmData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getVMs = async () => {
+    try {
+        const response = await axiosInstance.get('/vm/vms');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getUsers = async () => {
+    try {
+        const response = await axiosInstance.get('/user/users');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const grantAccess = async (user_id, vm_id) => {
+    try {
+        const response = await axiosInstance.post('/vm/vms/grant_access', { user_id, vm_id });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export default {
     fetchData,
     connectSSH,
-    getCurrentUser
+    getCurrentUser,
+    createVM,
+    getVMs,
+    getUsers,
+    grantAccess
 };

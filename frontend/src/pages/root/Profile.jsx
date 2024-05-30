@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import AuthService from '../../api/authService';
 import ApiService from '../../api/apiService';
+import GrantAccessForm from '../../components/GrantAccessForm';
 
 const Profile = () => {
 
-    const [user, setUser] = useState('')
+    const [user, setUser] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const handleLogout = () => {
         AuthService.logout();
         window.location.reload();
     };
+
+    useEffect(() => {
+        const isAdmin = AuthService.getAdminState();
+        setIsAdmin(isAdmin);
+    }, []);
 
     useEffect(() => {
         ApiService.getCurrentUser().then(data => {
@@ -30,6 +37,8 @@ const Profile = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             )}
+
+            {isAdmin && ( <GrantAccessForm /> )}
         </div>
     );
 };

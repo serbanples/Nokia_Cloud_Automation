@@ -65,3 +65,24 @@ def is_admin():
     if user:
         return jsonify({'is_admin': user.is_admin}), 200
     return jsonify({'message': 'User not found'}), 404
+
+@user_bp.route('/users', methods=['GET'])
+@jwt_required()
+def get_users():
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    if not current_user.is_admin:
+        return jsonify({'message': 'Unauthorized access'}), 403
+
+    users = User.query.all()
+    output = []
+    for user in users:
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'is_admin': user.is_admin
+        }
+        output.append(user_data)
+    return jsonify({'users': output}), 200

@@ -28,8 +28,10 @@ def create_app():
     from server.blueprints.user import user_bp
     from server.blueprints.ssh import ssh_bp
     from server.blueprints.data import data_bp
+    from server.blueprints.vm import vm_bp
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(ssh_bp, url_prefix='/ssh')
     app.register_blueprint(data_bp, url_prefix='/data')
+    app.register_blueprint(vm_bp, url_prefix='/vm')
 
     return app

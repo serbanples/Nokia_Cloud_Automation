@@ -7,13 +7,29 @@ import ModalForm from '../../components/ModalForm';
 import AddVMBox from '../../components/vmbox/AddVMBox';
 
 const Home = () => {
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const isAdmin = AuthService.getAdminState();
     setIsAdmin(isAdmin);
+  }, []);
+
+  const [vms, setVms] = useState([]);
+
+  useEffect(() => {
+    const fetchVMs = async () => {
+        try {
+            const response = await ApiService.getVMs();
+            setVms(response.vms);
+            console.log('vms', response.vms); 
+        } catch (error) {
+            console.error('Error fetching VMs:', error);
+        }
+    };
+
+    fetchVMs();
   }, []);
 
   useEffect(() => {
@@ -41,8 +57,13 @@ const Home = () => {
     setIsModalOpen(false);
   }
 
-  const handleFormSubmit = (newData) => {
-    console.log(newData);
+  const handleFormSubmit = async (newData) => {
+    try {
+      const response = await ApiService.createVM(newData);
+      console.log('VM created successfully:', response);
+  } catch (error) {
+      console.error('Error creating VM:', error);
+  }
   };
 
   return (
