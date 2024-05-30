@@ -9,6 +9,10 @@ export default {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
+      colors: {
+        nokiaBlue: '#2858ff',
+        darkBackground: "#0f1d57",
+      },
     },
   },
   plugins: [],

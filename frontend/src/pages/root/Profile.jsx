@@ -27,18 +27,36 @@ const Profile = () => {
     }, []);
 
     return (
-        <div>
-            <h2>Profile</h2>
-            {user && (
-                <div>
-                    <p>Username: {user.username}</p>
-                    <p>Email: {user.email}</p>
-                    <p>Admin: {user.is_admin ? "yes" : "no"}</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
-            )}
+        <div className='flex flex-col items-center justify-center h-screen font-poppins'>
+            <h1 className='text-white py-9 text-3xl font-bold text-center'>Profile</h1>
 
-            {isAdmin && ( <GrantAccessForm /> )}
+            <div className='w-full max-w-md bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4'>
+                {user && (
+                    <div className="bg-white bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4">
+                        <div className='mb-4'>
+                            <p className='font-semibold'>Username:</p>
+                            <p>{user.username}</p>
+                        </div>
+                        <div className='mb-4'>
+                            <p className='font-semibold'>Email:</p>
+                            <p>{user.email}</p>
+                        </div>
+                        <div className='mb-4'>
+                            <p className='font-semibold'>Admin:</p>
+                            <p>{user.is_admin ? "Yes" : "No"}</p>
+                        </div>
+                        <div className="mb-4">
+                            {isAdmin && (
+                            <div className='mt-4'>
+                                <GrantAccessForm />
+                            </div>
+                        )}
+                        </div>
+                        <button className="w-full bg-nokiaBlue text-white rounded-md px-4 py-2" onClick={handleLogout}>Logout</button>
+                        
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
