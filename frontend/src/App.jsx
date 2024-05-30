@@ -7,11 +7,12 @@ import { AuthRoutes, RootRoutes } from './components/Routes'
 import Profile from './pages/root/Profile'
 import Home from './pages/root/Home'
 import AuthLayout from './pages/auth/AuthLayout'
+import RootLayout from './pages/root/RootLayout'
 
 const App = () => {
   return (
     <Routes>
-      <Route element={ <RootRoutes /> }>
+      <Route element={ <RootLayout /> }>
         <Route path='/profile' element={ <Profile /> } />
         <Route index element={ <Home />} />
       </Route>
