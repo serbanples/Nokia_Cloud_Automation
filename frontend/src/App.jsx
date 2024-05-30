@@ -7,12 +7,14 @@ import Profile from './pages/root/Profile'
 import Home from './pages/root/Home'
 import AuthLayout from './pages/auth/AuthLayout'
 import RootLayout from './pages/root/RootLayout'
+import Help from './pages/root/Help'
 
 const App = () => {
   return (
     <Routes>
       <Route element={ <RootLayout /> }>
         <Route path='/profile' element={ <Profile /> } />
+        <Route path='/help' element={ <Help /> } />
         <Route index element={ <Home />} />
       </Route>
       <Route path='/auth' element={ <AuthLayout /> }>

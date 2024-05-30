@@ -10,7 +10,7 @@ const RootLayout = () => {
     access_token ?  
       <>
         <Navbar />
-        <div className="bg-darkBackground w-full h-screen" >
+        <div className="bg-darkBackground w-full min-h-screen" >
           <Outlet/>
         </div>
       </>
