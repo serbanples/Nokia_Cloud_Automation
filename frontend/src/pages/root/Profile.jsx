@@ -28,7 +28,7 @@ const Profile = () => {
 
     return (
         <div className='flex flex-col items-center justify-center h-screen font-poppins'>
-            <h1 className='text-white py-9 text-3xl font-bold text-center'>Profile</h1>
+            <h1 className='text-white pb-9 text-3xl font-bold text-center'>Profile</h1>
 
             <div className='w-full max-w-md bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4'>
                 {user && (
