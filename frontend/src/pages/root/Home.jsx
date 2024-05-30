@@ -11,6 +11,7 @@ const Home = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedVM, setSelectedVM] = useState(null);
 
   useEffect(() => {
     const isAdmin = AuthService.getAdminState();
@@ -23,7 +24,6 @@ const Home = () => {
     ApiService.getVMs().then(rawData => {
       const sortedData = rawData.vms.sort((a, b) => b.has_access - a.has_access);
       setData(sortedData);
-      console.log(sortedData);
     }).catch(error => {
       console.error('Error fetching data:', error);
     });
@@ -37,6 +37,10 @@ const Home = () => {
     setIsModalOpen(false);
   }
 
+  const handleVMClick = (vmData) => {
+    setSelectedVM(vmData);
+  }
+
   const handleFormSubmit = async (newData) => {
     try {
       const response = await ApiService.createVM(newData);
@@ -48,16 +52,19 @@ const Home = () => {
   };
 
   return (
-    <div className='px-10 pb-10 pt-32 w-1/2'>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className='px-10 pb-10 pt-32 flex'>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-5/12 border-r-white border-r-2 pr-6">
         {data.map((row, index) => (
           <div key={index} className={row.has_access ? '' : 'opacity-50'}>
-            <VMBox data={row} />
+            <VMBox data={row} onClick={() => handleVMClick(row)}/>
           </div>
         ))}
         {isAdmin && (
           <AddVMBox onClick={handleAddClick} />
         )}
+      </div>
+      <div className='w-7/12 pl-6'>
+        <ExtendVMBox vmData={selectedVM}/>
       </div>
       <ModalForm isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
     </div>
