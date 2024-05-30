@@ -12,7 +12,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="bg-white text-nokiaBlue flex justify-between items-center p-4">
+        <div className="fixed w-full bg-white text-nokiaBlue flex justify-between items-center p-4">
             <div>
                 <Link to="/">
                     <img src= { logo } alt="Placeholder" className="w-32" />

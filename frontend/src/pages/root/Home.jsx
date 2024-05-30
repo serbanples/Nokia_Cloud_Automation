@@ -21,8 +21,9 @@ const Home = () => {
 
   useEffect(() => {
     ApiService.getVMs().then(rawData => {
-      setData(rawData.vms);
-      console.log(rawData.vms);
+      const sortedData = rawData.vms.sort((a, b) => b.has_access - a.has_access);
+      setData(sortedData);
+      console.log(sortedData);
     }).catch(error => {
       console.error('Error fetching data:', error);
     });
@@ -47,7 +48,7 @@ const Home = () => {
   };
 
   return (
-    <div className='px-10 py-10 w-1/2'>
+    <div className='px-10 pb-10 pt-32 w-1/2'>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((row, index) => (
           <div key={index} className={row.has_access ? '' : 'opacity-50'}>

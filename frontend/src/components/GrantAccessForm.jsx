@@ -24,8 +24,7 @@ const GrantAccessForm = () => {
         fetchUsersAndVMs();
     }, []);
 
-    const handleSubmit = async (e) => {
-        console.log(user_id, vm_id);
+    const handleGrantAccess = async (e) => {
         e.preventDefault();
         try {
             await ApiService.grantAccess(user_id, vm_id);
@@ -36,8 +35,19 @@ const GrantAccessForm = () => {
         }
     };
 
+    const handleRevokeAccess = async (e) => {
+        e.preventDefault();
+        try {
+            await ApiService.revokeAccess(user_id, vm_id);
+            alert('Access revoked successfully');
+        } catch (error) {
+            console.error('Error revoking access:', error);
+            alert('Failed to revoke access');
+        }
+    };
+
     return (
-        <form className='font-poppins justify-center' onSubmit={handleSubmit}>
+        <form className='font-poppins justify-center'>
             <label>
                 <p className='font-semibold'>Select User:</p>
                 <select className="border rounded-md px-2 py-1" value={user_id} onChange={(e) => setUserId(e.target.value)} required>
@@ -58,8 +68,21 @@ const GrantAccessForm = () => {
                 </select>
             </label>
             <br />
-            <div className='container items-center h-fit'>
-                <button className="w-1/2 mt-3 bg-nokiaBlue text-white rounded-md px-4 py-2" type="submit">Grant Access</button>
+            <div className='container items-center h-fit flex-row'>
+                <button 
+                    className="w-1/2 mt-3 bg-nokiaBlue text-white rounded-md px-4 py-2 mr-2" 
+                    type="button"
+                    onClick={handleGrantAccess}
+                >
+                    Grant Access
+                </button>
+                <button 
+                    className="w-1/2 mt-3 bg-red-500 text-white rounded-md px-4 py-2" 
+                    type="button"
+                    onClick={handleRevokeAccess}
+                >
+                    Revoke Access
+                </button>
             </div>
         </form>
     );

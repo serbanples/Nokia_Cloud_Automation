@@ -105,6 +105,15 @@ const grantAccess = async (user_id, vm_id) => {
     }
 };
 
+const revokeAccess = async (user_id, vm_id) => {
+    try {
+        const response = await axiosInstance.post('/vm/vms/revoke_access', { user_id, vm_id });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export default {
     fetchData,
     connectSSH,
@@ -112,5 +121,6 @@ export default {
     createVM,
     getVMs,
     getUsers,
-    grantAccess
+    grantAccess,
+    revokeAccess
 };

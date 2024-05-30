@@ -93,3 +93,25 @@ def grant_access():
     db.session.commit()
 
     return jsonify({'message': 'Access granted successfully'}), 200
+
+@vm_bp.route('/vms/revoke_access', methods=['POST'])
+@jwt_required()
+def revoke_access():
+    data = request.get_json()
+    current_user_id = get_jwt_identity()
+
+    user = User.query.get(current_user_id)
+    if not user.is_admin:
+        return jsonify({'message': 'Unauthorized'}), 403
+
+    user_id = data.get('user_id')
+    vm_id = data.get('vm_id')
+
+    access = VMAccess.query.filter_by(user_id=user_id, vm_id=vm_id).first()
+    if not access:
+        return jsonify({'message': 'Access not found'}), 404
+
+    db.session.delete(access)
+    db.session.commit()
+
+    return jsonify({'message': 'Access revoked successfully'}), 200
