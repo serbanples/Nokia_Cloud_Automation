@@ -78,6 +78,15 @@ const createVM = async (vmData) => {
     }
 };
 
+const deleteVM = async (vmId) => {
+    try {
+        const response = await axiosInstance.delete(`/vm/vms/${vmId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const getVMs = async () => {
     try {
         const response = await axiosInstance.get('/vm/vms');
@@ -119,6 +128,7 @@ export default {
     connectSSH,
     getCurrentUser,
     createVM,
+    deleteVM,
     getVMs,
     getUsers,
     grantAccess,
