@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NavBar from '../../components/NavBar';
 import VMBox from '../../components/vmbox/VMBox';
 import ApiService from '../../api/apiService';
 import AuthService from '../../api/authService';
@@ -46,9 +45,18 @@ const Home = () => {
       const response = await ApiService.createVM(newData);
       window.location.reload();
       console.log('VM created successfully:', response);
-  } catch (error) {
+    } catch (error) {
       console.error('Error creating VM:', error);
-  }
+    }
+  };
+
+  const handleVMDelete = async (vmId) => {
+    try {
+      await ApiService.deleteVM(vmId);
+      setData(data.filter(vm => vm.id !== vmId));
+    } catch (error) {
+      console.error('Error deleting VM:', error);
+    }
   };
 
   return (
@@ -56,7 +64,7 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-5/12 border-r-white border-r-2 pr-6">
         {data.map((row, index) => (
           <div key={index} className={row.has_access ? '' : 'opacity-50'}>
-            <VMBox data={row} onClick={() => handleVMClick(row)}/>
+            <VMBox data={row} onClick={() => handleVMClick(row)} onDelete={handleVMDelete}/>
           </div>
         ))}
         {isAdmin && (
