@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../api/apiService';
+import SearchableDropdown from './SearchableDropdown';
 
 const GrantAccessForm = () => {
     const [users, setUsers] = useState([]);
@@ -48,9 +49,9 @@ const GrantAccessForm = () => {
 
     return (
         <form className='font-poppins justify-center'>
-            <label>
+            {/* <label>
                 <p className='font-semibold'>Select User:</p>
-                <select className="border rounded-md px-2 py-1" value={user_id} onChange={(e) => setUserId(e.target.value)} required>
+                <select className="border rounded-md px-2 py-1 bg-opacity-30" value={user_id} onChange={(e) => setUserId(e.target.value)} required>
                     <option value="" disabled>Select a user</option>
                     {users.map(user => (
                         <option key={user.id} value={user.id}>{user.email}</option>
@@ -66,6 +67,22 @@ const GrantAccessForm = () => {
                         <option key={vm.id} value={vm.id}>{vm.name}</option>
                     ))}
                 </select>
+            </label> */}
+
+            {/* TESTTTTT */}
+            <label>
+        <p className='font-semibold'>Select User:</p>
+        <select className="border rounded-md px-2 py-1 bg-opacity-30" value={user_id} onChange={(e) => setUserId(e.target.value)} required>
+          <option value="" disabled>Select a user</option>
+          {users.map(user => (
+            <option key={user.id} value={user.id}>{user.email}</option>
+          ))}
+        </select>
+      </label>
+      <br />
+            <label className=''>
+              <option value="" disabled>Select VM:</option>
+              <SearchableDropdown vms={vms} vm_id={vm_id} setVMId={setVMId} />
             </label>
             <br />
             <div className='container items-center h-fit flex-row'>

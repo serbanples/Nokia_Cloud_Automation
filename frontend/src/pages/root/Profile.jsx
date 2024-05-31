@@ -30,9 +30,9 @@ const Profile = () => {
         <div className='flex flex-col items-center justify-center h-screen font-poppins'>
             <h1 className='text-white pb-9 text-3xl font-bold text-center'>Profile</h1>
 
-            <div className='w-full max-w-md bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4'>
+            <div className='w-full max-w-md shadow-md rounded px-2 pt-6 pb-8 mb-4'>
                 {user && (
-                    <div className="bg-white bg-opacity-80 shadow-md rounded px-2 pt-6 pb-8 mb-4">
+                    <div className="bg-white bg-opacity-40 shadow-md rounded px-2 pt-6 pb-8 mb-4">
                         <div className='mb-4'>
                             <p className='font-semibold'>Username:</p>
                             <p>{user.username}</p>
@@ -45,6 +45,7 @@ const Profile = () => {
                             <p className='font-semibold'>Admin:</p>
                             <p>{user.is_admin ? "Yes" : "No"}</p>
                         </div>
+                        <hr className="my-4 border-t-2 border-darkBackground"></hr>
                         <div className="mb-4">
                             {isAdmin && (
                             <div className='mt-4'>
