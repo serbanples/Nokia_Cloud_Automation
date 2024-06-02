@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router-dom'
 import LogIn from './pages/auth/LogIn'
 import SignUp from './pages/auth/SignUp'
 import Page from './pages/root/Page'
@@ -15,7 +15,7 @@ const App = () => {
       <Route element={ <RootLayout /> }>
         <Route path='/profile' element={ <Profile /> } />
         <Route path='/help' element={ <Help /> } />
-        <Route index element={ <Home />} />
+        <Route path='/' index element={ <Home />} />
       </Route>
       <Route path='/auth' element={ <AuthLayout /> }>
         <Route path='login' element={ <LogIn /> } />
