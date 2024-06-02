@@ -1,5 +1,8 @@
 // ModalForm.js
 import React, { useState } from 'react';
+import useAlert from '../../hooks/useAlert';
+import Alert from '../shared/Alert';
+
 
 const ModalForm = ({ isOpen, onClose, onSubmit }) => {
   const [vmData, setVmData] = useState({
@@ -91,17 +94,6 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
                 required
               />
             </div>
-            {/* <div className="mb-6">
-              <label className="block text-gray-700 mb-1">Memory</label>
-              <input
-                type="text"
-                name="memory"
-                value={formData.memory}
-                onChange={handleChange}
-                className="w-full p-3 border rounded-lg text-gray-700"
-                required
-              />
-            </div> */}
           </div>
           <div className="flex justify-end">
             <button
@@ -114,8 +106,13 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded"
+              disabled={isLoading}
             >
-              Submit
+              {isLoading ? (
+                <div className='loader'></div>
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </form>

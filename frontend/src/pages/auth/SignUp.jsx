@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // If you're using React Router
 import AuthService from '../../api/authService';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import useAlert from '../../hooks/useAlert';
+import Alert from '../../components/shared/Alert';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,8 @@ const SignUp = () => {
 
   const { name, email, password, confirm_password, rememberMe } = formData;
 
+  const { alert, showAlert, hideAlert } = useAlert();
+
   const onChange = e => setFormData({ ...formData, [e.target.id]: e.target.value });
 
   const onCheckboxChange = e => setFormData({ ...formData, rememberMe: e.target.checked });
@@ -27,17 +31,21 @@ const SignUp = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-        await AuthService.register(name, email, password);
-        await AuthService.login(email, password, rememberMe);
-        navigate('/');
-        window.location.reload();
+      await AuthService.register(name, email, password);
+      await AuthService.login(email, password, rememberMe);
+      navigate('/');
+      window.location.reload();
     } catch (error) {
-        console.log('Failed to register', error);
+      showAlert({ show: true, text: `${error.response.data.error}`, type: 'danger' });
     }
+    setTimeout(() => {
+      hideAlert();
+    }, [3000])
   };
 
   return (
     <>
+      {alert.show && <Alert {...alert} />}
       <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Sign Up</h1>
       <form className='w-3/4' onSubmit={handleRegister}>
         <div className="mb-4">

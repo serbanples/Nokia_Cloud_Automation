@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from server import db
 from server.models import VMTable, User, VMAccess
+from sqlalchemy.exc import IntegrityError
 
 vm_bp = Blueprint('vm', __name__)
 
@@ -10,23 +11,27 @@ vm_bp = Blueprint('vm', __name__)
 def add_vm():
     data = request.get_json()
     current_user_id = get_jwt_identity()
-    
-    new_vm = VMTable(
-        name=data['name'],
-        topology=data['topology'],
-        VM1=data['VM1'],
-        VM2=data['VM2'],
-        M_Plane=data['M_Plane'],
-        added_by=current_user_id
-    )
-    db.session.add(new_vm)
-    db.session.commit()
 
-    access = VMAccess(user_id = current_user_id, vm_id = new_vm.id)
-    db.session.add(access)
-    db.session.commit()
+    try:
+        new_vm = VMTable(
+            name=data['name'],
+            topology=data['topology'],
+            VM1=data['VM1'],
+            VM2=data['VM2'],
+            M_Plane=data['M_Plane'],
+            added_by=current_user_id
+        )
+        db.session.add(new_vm)
+        db.session.commit()
 
-    return jsonify({'message': 'VM added successfully'}), 201
+        access = VMAccess(user_id=current_user_id, vm_id=new_vm.id)
+        db.session.add(access)
+        db.session.commit()
+
+        return jsonify({'message': 'VM added successfully'}), 201
+    except IntegrityError:
+        db.session.rollback()  # Important to roll back the session to clear the failed transaction
+        return jsonify({'error': 'A VM with the same name, topology, VM1, or M-Plane already exists.'}), 400
 
 @vm_bp.route('/vms', methods=['GET'])
 @jwt_required()

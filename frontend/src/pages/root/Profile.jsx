@@ -8,9 +8,9 @@ const Profile = () => {
     const [user, setUser] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
 
-    const handleLogout = () => {
-        AuthService.logout();
-        window.location.reload();
+    const handleDelete = () => {
+        const response = AuthService.deleteUser(user.id);
+        console.log(response);
     };
 
     useEffect(() => {
@@ -21,6 +21,7 @@ const Profile = () => {
     useEffect(() => {
         ApiService.getCurrentUser().then(data => {
             setUser(data);
+            console.log(data)
         }).catch(error => {
             console.error('Error fetching user:', error);
         });
@@ -53,7 +54,7 @@ const Profile = () => {
                             </div>
                         )}
                         </div>
-                        <button className="w-full bg-nokiaBlue text-white rounded-md px-4 py-2" onClick={handleLogout}>Logout</button>
+                        <button className="w-full bg-red-500 text-white rounded-md px-4 py-2" onClick={handleDelete}>Delete Account</button>
                         
                     </div>
                 )}

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import AuthService from '../../api/authService';
+import useAlert from '../../hooks/useAlert';
+import Alert from '../../components/shared/Alert';
 
 const LogIn = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,8 @@ const LogIn = () => {
 
   const { email, password, rememberMe } = formData;
 
+  const { alert, showAlert, hideAlert } = useAlert();
+
   const onChange = e => setFormData({ ...formData, [e.target.id]: e.target.value });
 
   const onCheckboxChange = e => setFormData({ ...formData, rememberMe: e.target.checked });
@@ -26,12 +30,16 @@ const LogIn = () => {
         navigate('/');
         window.location.reload();
     } catch (error) {
-        console.error('Invalid credentials:', error);
+      showAlert({ show: true, text: `${error.response.data.message}`, type: 'danger' });
     }
+    setTimeout(() => {
+      hideAlert();
+    }, [3000])
   };
 
   return (
     <>
+      {alert.show && <Alert {...alert} />}
       <h1 className='mb-4 ml-5 font-bold text-gray-700 text-2xl'>Log In</h1>
       <form className='w-3/4' onSubmit={handleLogin}>
         <div className="mb-4">

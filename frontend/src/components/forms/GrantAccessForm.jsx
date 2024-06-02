@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../../api/apiService';
+import Alert from '../shared/Alert';
+import useAlert from '../../hooks/useAlert';
 
 const GrantAccessForm = () => {
     const [users, setUsers] = useState([]);
     const [vms, setVMs] = useState([]);
     const [user_id, setUserId] = useState('');
     const [vm_id, setVMId] = useState('');
+
+    const {alert, showAlert, hideAlert } = useAlert();
 
     useEffect(() => {
         const fetchUsersAndVMs = async () => {
@@ -28,26 +32,31 @@ const GrantAccessForm = () => {
         e.preventDefault();
         try {
             await ApiService.grantAccess(user_id, vm_id);
-            alert('Access granted successfully');
+            showAlert({ show: true, text: 'Access granted successfully', type: 'success'});
         } catch (error) {
-            console.error('Error granting access:', error);
-            alert('Failed to grant access');
+            showAlert({ show: true, text: `${error.response.data.message}`, type: 'danger'});
         }
+        setTimeout(() => {
+            hideAlert();
+          }, [3000])
     };
 
     const handleRevokeAccess = async (e) => {
         e.preventDefault();
         try {
             await ApiService.revokeAccess(user_id, vm_id);
-            alert('Access revoked successfully');
+            showAlert({ show: true, text: 'Access revoked successfully', type: 'success'});
         } catch (error) {
-            console.error('Error revoking access:', error);
-            alert('Failed to revoke access');
+            showAlert({ show: true, text: `${error.response.data.message}`, type: 'danger'});
         }
+        setTimeout(() => {
+            hideAlert();
+          }, [3000])
     };
 
     return (
         <form className='font-poppins justify-center'>
+            {alert.show && <Alert {...alert} />}
             <label>
                 <p className='font-semibold'>Select User:</p>
                 <select className="border rounded-md px-2 py-1" value={user_id} onChange={(e) => setUserId(e.target.value)} required>

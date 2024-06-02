@@ -10,6 +10,8 @@ from flask_jwt_extended import (
 
 user_bp = Blueprint('auth', __name__)
 
+import re
+
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -18,10 +20,24 @@ def register():
     password = data.get('password')
     is_admin = data.get('is_admin', False)
 
+    # Username validation
+    if len(username) < 5:
+        return jsonify({'error': 'Username must be at least 5 characters long.'}), 400
+
     if User.query.filter_by(username=username).first():
-        return jsonify({'message': 'Username already exists'}), 400
+        return jsonify({'error': 'Username already exists'}), 400
+
+    # Email validation
     if User.query.filter_by(email=email).first():
-        return jsonify({'message': 'Email already exists'}), 400
+        return jsonify({'error': 'Email already exists'}), 400
+
+    # Password validation
+    if len(password) < 8:
+        return jsonify({'error': 'Password must be at least 8 characters long.'}), 400
+    if not re.search(r'[A-Z]', password):
+        return jsonify({'error': 'Password must contain at least one uppercase letter.'}), 400
+    if not re.search(r'[0-9]', password):
+        return jsonify({'error': 'Password must contain at least one number.'}), 400
 
     user = User(username=username, email=email, is_admin=is_admin)
     user.set_password(password)
@@ -29,6 +45,7 @@ def register():
     db.session.commit()
 
     return jsonify({'message': 'User registered successfully'}), 201
+
 
 @user_bp.route('/login', methods=['POST'])
 def login():
@@ -91,6 +108,28 @@ def get_users():
         }
         output.append(user_data)
     return jsonify({'users': output}), 200
+
+@user_bp.route('/delete/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    # Check if current user is admin or trying to delete their own account
+    current_user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Optionally, ensure that only admins can delete other users
+    if user_id != current_user_id:
+        current_user = User.query.get(current_user_id)
+        if not current_user.is_admin:
+            return jsonify({'error': 'Unauthorized to delete this user'}), 403
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User deleted successfully'}), 200
+
 
 @user_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)

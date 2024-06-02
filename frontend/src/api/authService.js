@@ -117,6 +117,19 @@ const logout = () => {
     sessionStorage.removeItem('is_admin');
 };
 
+const deleteUser = async (userId) => {
+    try {
+        const response = await axiosInstance.delete(`/user/delete/${userId}`);
+        logout();
+        window.location.reload();
+        return response.data; // Return the success message from the server
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        throw error; // Rethrow to handle it in the UI layer, such as showing an error message to the user
+    }
+};
+
+
 const getAccessToken = () => {
     return localStorage.getItem('access_token') || sessionStorage.getItem('access_token') || null;
 };
@@ -130,6 +143,7 @@ export default {
     register,
     login,
     logout,
+    deleteUser,
     getAccessToken,
     getAdminState,
     refreshAccessToken

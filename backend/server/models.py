@@ -1,4 +1,5 @@
 from server import db, bcrypt
+from sqlalchemy import UniqueConstraint
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -32,6 +33,8 @@ class VMTable(db.Model):
 
     access_list = db.relationship('VMAccess', backref='vm_entry', cascade="all, delete-orphan", lazy=True, overlaps="vm_access_entries")
     vm_access_entries = db.relationship('VMAccess', backref='entry_vm', lazy=True, overlaps="access_list,vm_entry")
+
+    __table_args__ = (UniqueConstraint('name', 'topology', 'VM1', 'M_Plane', name='unique_vm_attributes'),)
 
 class VMAccess(db.Model):
     __tablename__ = 'vmaccess'

@@ -12,11 +12,19 @@
     width: 24px;
     height: 24px;
     animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
+}
+@keyframes spin {
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
+
+input:checked + span {
+    background-color: #3b82f6; /* Tailwind blue-500 */
+}
+
+input:checked + span + span {
+    transform: translateX(1.5rem); /* Slide the toggle button to the right */
+}
   
+
