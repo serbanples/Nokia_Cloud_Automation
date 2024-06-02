@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AuthService from '../../api/authService';
 import ApiService from '../../api/apiService';
-import GrantAccessForm from '../../components/GrantAccessForm';
+import GrantAccessForm from '../../components/forms/GrantAccessForm';
 
 const Profile = () => {
 

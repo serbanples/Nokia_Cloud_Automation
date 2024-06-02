@@ -41,24 +41,7 @@ axiosInstance.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
-// Define your API functions using the Axios instance
-const fetchData = async () => {
-    try {
-        const response = await axiosInstance.get('/data/read');
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
-const connectSSH = async (name, VM1) => {
-    try {
-        const response = await axiosInstance.post('/connect', { name, VM1 });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
+// User endpoints
 
 const getCurrentUser = async () => {
     try {
@@ -68,6 +51,17 @@ const getCurrentUser = async () => {
         throw error;
     }
 };
+
+const getUsers = async () => {
+    try {
+        const response = await axiosInstance.get('/user/users');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+//vm Endpoints
 
 const createVM = async (vmData) => {
     try {
@@ -85,7 +79,7 @@ const deleteVM = async (vmId) => {
     } catch (error) {
         throw error;
     }
-}
+};
 
 const getVMs = async () => {
     try {
@@ -96,14 +90,7 @@ const getVMs = async () => {
     }
 };
 
-const getUsers = async () => {
-    try {
-        const response = await axiosInstance.get('/user/users');
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
+//vm access endpoints
 
 const grantAccess = async (user_id, vm_id) => {
     try {
@@ -121,16 +108,46 @@ const revokeAccess = async (user_id, vm_id) => {
     } catch (error) {
         throw error;
     }
+};
+
+//ssh endpoints
+
+const connectSSH = async (hostname, username, password) => {
+    try {
+        const response = await axiosInstance.post('/ssh/connect', { hostname, username, password });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const runScript = async (command) => {
+    try {
+        const response = await axiosInstance.post('/ssh/execute', { command });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const closeSSH = async () => {
+    try {
+        const response = await axiosInstance.post('/ssh/close');
+        return response.data;
+    } catch(error) {
+        throw error;
+    }
 }
 
 export default {
-    fetchData,
-    connectSSH,
     getCurrentUser,
     createVM,
     deleteVM,
     getVMs,
     getUsers,
     grantAccess,
-    revokeAccess
+    revokeAccess,
+    connectSSH,
+    runScript,
+    closeSSH
 };

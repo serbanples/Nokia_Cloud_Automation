@@ -8,15 +8,23 @@ const ModalForm = ({ isOpen, onClose, onSubmit }) => {
     VM1: '',
     VM2: '',
     M_Plane: ''
-});
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setVmData({ ...vmData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(vmData);
+    setIsLoading(true);
+    try {
+      await onSubmit(vmData);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+    setIsLoading(false);
     onClose();
   };
 

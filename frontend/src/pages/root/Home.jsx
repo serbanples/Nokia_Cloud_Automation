@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import NavBar from '../../components/shared/NavBar';
 import VMBox from '../../components/vmbox/VMBox';
 import ApiService from '../../api/apiService';
 import AuthService from '../../api/authService';
-import ModalForm from '../../components/ModalForm';
+import ModalForm from '../../components/forms/ModalForm';
 import AddVMBox from '../../components/vmbox/AddVMBox';
-import ExtendVMBox from '../../components/ExtendVMBox';
+import ExtendVMBox from '../../components/vmbox/ExtendVMBox';
 
 const Home = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -16,8 +17,6 @@ const Home = () => {
     const isAdmin = AuthService.getAdminState();
     setIsAdmin(isAdmin);
   }, []);
-
-  const [vms, setVms] = useState([]);
 
   useEffect(() => {
     ApiService.getVMs().then(rawData => {
@@ -36,18 +35,17 @@ const Home = () => {
     setIsModalOpen(false);
   }
 
-  const handleVMClick = (vmData) => {
-    setSelectedVM(vmData);
-  }
-
   const handleFormSubmit = async (newData) => {
     try {
       const response = await ApiService.createVM(newData);
       window.location.reload();
-      console.log('VM created successfully:', response);
     } catch (error) {
-      console.error('Error creating VM:', error);
+        console.error('Error creating VM:', error);
     }
+  };
+
+  const handleVMClick = (vmData) => {
+    setSelectedVM(vmData);
   };
 
   const handleVMDelete = async (vmId) => {
@@ -64,19 +62,19 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-5/12 border-r-white border-r-2 pr-6">
         {data.map((row, index) => (
           <div key={index} className={row.has_access ? '' : 'opacity-50'}>
-            <VMBox data={row} onClick={() => handleVMClick(row)} onDelete={handleVMDelete}/>
+            <VMBox data={row} onClick={() => handleVMClick(row)} onDelete={handleVMDelete} />
           </div>
         ))}
         {isAdmin && (
           <AddVMBox onClick={handleAddClick} />
         )}
       </div>
-      <div className='w-7/12 pl-6'>
-        <ExtendVMBox vmData={selectedVM}/>
+      <div className='w-7/12 pl-6 flex items-start'>
+          <ExtendVMBox vmData={selectedVM} />
       </div>
       <ModalForm isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
     </div>
-    )
+  )
 }
 
-export default Home
+export default Home;

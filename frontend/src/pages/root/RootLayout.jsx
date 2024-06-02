@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../../components/NavBar'
+import Navbar from '../../components/shared/NavBar'
 import { Navigate, Outlet } from 'react-router-dom'
 import AuthService from "../../api/authService"
 

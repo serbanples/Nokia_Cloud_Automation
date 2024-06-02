@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser, FaCog, FaQuestionCircle } from 'react-icons/fa';  // Import icons
-import AuthService from '../api/authService';
-import logo from "../../public/logo_navbar.jpg"
+import AuthService from '../../api/authService';
+import logo from "../../../public/logo_navbar.jpg"
 
 const Navbar = () => {
 

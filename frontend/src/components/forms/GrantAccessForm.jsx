@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ApiService from '../api/apiService';
+import ApiService from '../../api/apiService';
 
 const GrantAccessForm = () => {
     const [users, setUsers] = useState([]);
